@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#7f1d1d">
+<title>ABVSLS | Mid-Semester Exam Duty</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:#f5f6f8;color:#17202a}
+.header{background:linear-gradient(135deg,#7f1d1d,#991b1b);color:#fff;padding:30px 18px 34px;text-align:center}
+.header h1{margin:0;font-size:clamp(22px,4vw,34px);letter-spacing:.3px}
+.header p{margin:8px 0 0;font-size:15px;opacity:.9}
+.card{width:min(620px,calc(100% - 28px));margin:-18px auto 30px;background:#fff;border-radius:18px;padding:24px;box-shadow:0 10px 35px rgba(0,0,0,.10)}
+label{display:block;font-weight:700;font-size:14px;margin:0 0 8px}
+select{width:100%;padding:13px 14px;border:1px solid #d5d9df;border-radius:10px;background:#fff;font-size:16px;margin-bottom:18px}
+button{width:100%;border:0;border-radius:10px;padding:14px;background:#7f1d1d;color:#fff;font-size:16px;font-weight:700;cursor:pointer}
+button:hover{background:#651818}
+.result{margin-top:22px;border-radius:14px;padding:20px;display:none}
+.assigned{background:#f0fdf4;border:1px solid #bbf7d0}
+.none{background:#fff7ed;border:1px solid #fed7aa}
+.result h2{margin:0 0 14px;font-size:21px}
+.meta{font-size:16px;margin:7px 0}
+.meta b{display:inline-block;min-width:72px}
+.timing{font-size:22px;font-weight:800;margin-top:12px}
+.note{margin-top:14px;font-size:13px;color:#5b6470}
+.footer{text-align:center;color:#69727d;font-size:12px;padding:0 15px 25px}
+.small{font-size:12px;color:#6b7280;margin-top:-10px;margin-bottom:18px}
+</style>
+</head>
+<body>
+<header class="header">
+  <h1>Atal Bihari Vajpayee School of Legal Studies</h1>
+  <p>Mid-Semester Examination 2026–27 · Exam Duty Checker</p>
+</header>
+
+<main class="card">
+  <label for="teacher">Select Teacher</label>
+  <select id="teacher"><option value="">— Select your name —</option></select>
+
+  <label for="date">Select Exam Date</label>
+  <select id="date"><option value="">— Select exam date —</option></select>
+  <div class="small">Only scheduled examination dates are shown.</div>
+
+  <button onclick="checkDuty()">CHECK DUTY</button>
+
+  <section id="result" class="result"></section>
+</main>
+
+<div class="footer">
+  Room number / examination centre will be communicated at the Exam Control Room at the time of signing.
+</div>
+
+<script>
+const DATA = {"teachers":["Dr. Divyansh Shukla","Dr. Nitesh Kumar Chaturvedi","Dr. Pramod Kumar","Dr. Samiuddin","Mr. Prabhat Kumar Mishra","Mr. Prerit Narayan Mishra","Mr. Rishi Srivastava","Mr. Sharad Dixit","Mrs. Mayuri Singh","Mrs. Pragya Srivastava","Ms. Akriti Daksh","Ms. Aparna","Ms. Deeksha Bajpai","Ms. Hemlata Ninoriya","Ms. Kaushiki Trivedi","Ms. Meghna Bajpai","Ms. Minakshi","Ms. Pia Shukla","Ms. Satakshi Dixit","Ms. Shailja Sachan","Ms. Sharwani Pandey","Ms. Vidhi Katiyar"],"dates":["2026-09-21","2026-09-22","2026-09-23","2026-09-24","2026-09-25","2026-09-26"],"duties":[{"teacher":"Dr. Divyansh Shukla","date":"2026-09-21","timing":"(09:00–10:30)"},{"teacher":"Dr. Divyansh Shukla","date":"2026-09-22","timing":"(15:30–17:00)"},{"teacher":"Dr. Divyansh Shukla","date":"2026-09-22","timing":"(15:30–17:00)"},{"teacher":"Dr. Divyansh Shukla","date":"2026-09-23","timing":"(13:30–15:00)"},{"teacher":"Dr. Divyansh Shukla","date":"2026-09-24","timing":"(11:00–12:30)"},{"teacher":"Dr. Divyansh Shukla","date":"2026-09-24","timing":"(11:00–12:30)"},{"teacher":"Dr. Divyansh Shukla","date":"2026-09-25","timing":"(15:30–17:00)"},{"teacher":"Dr. Divyansh Shukla","date":"2026-09-26","timing":"(15:30–17:00)"},{"teacher":"Dr. Nitesh Kumar Chaturvedi","date":"2026-09-22","timing":"(09:00–10:30)"},{"teacher":"Dr. Nitesh Kumar Chaturvedi","date":"2026-09-22","timing":"(13:30–15:00)"},{"teacher":"Dr. Nitesh Kumar Chaturvedi","date":"2026-09-23","timing":"(11:00–12:30)"},{"teacher":"Dr. Nitesh Kumar Chaturvedi","date":"2026-09-23","timing":"(13:30–15:00)"},{"teacher":"Dr. Nitesh Kumar Chaturvedi","date":"2026-09-24","timing":"(11:00–12:30)"},{"teacher":"Dr. Nitesh Kumar Chaturvedi","date":"2026-09-25","timing":"(15:30–17:00)"},{"teacher":"Dr. Nitesh Kumar Chaturvedi","date":"2026-09-26","timing":"(13:30–15:00)"},{"teacher":"Dr. Pramod Kumar","date":"2026-09-22","timing":"(11:00–12:30)"},{"teacher":"Dr. Pramod Kumar","date":"2026-09-22","timing":"(15:30–17:00)"},{"teacher":"Dr. Pramod Kumar","date":"2026-09-23","timing":"(15:30–17:00)"},{"teacher":"Dr. Pramod Kumar","date":"2026-09-23","timing":"(15:30–17:00)"},{"teacher":"Dr. Pramod Kumar","date":"2026-09-24","timing":"(09:00–10:30)"},{"teacher":"Dr. Pramod Kumar","date":"2026-09-24","timing":"(11:00–12:30)"},{"teacher":"Dr. Pramod Kumar","date":"2026-09-25","timing":"(15:30–17:00)"},{"teacher":"Dr. Pramod Kumar","date":"2026-09-26","timing":"(13:30–15:00)"},{"teacher":"Dr. Samiuddin","date":"2026-09-21","timing":"(13:30–15:00)"},{"teacher":"Dr. Samiuddin","date":"2026-09-23","timing":"(15:30–17:00)"},{"teacher":"Dr. Samiuddin","date":"2026-09-23","timing":"(15:30–17:00)"},{"teacher":"Dr. Samiuddin","date":"2026-09-24","timing":"(15:30–17:00)"},{"teacher":"Dr. Samiuddin","date":"2026-09-24","timing":"(15:30–17:00)"},{"teacher":"Dr. Samiuddin","date":"2026-09-25","timing":"(15:30–17:00)"},{"teacher":"Dr. Samiuddin","date":"2026-09-26","timing":"(13:30–15:00)"},{"teacher":"Dr. Samiuddin","date":"2026-09-26","timing":"(15:30–17:00)"},{"teacher":"Mr. Prabhat Kumar Mishra","date":"2026-09-22","timing":"(15:30–17:00)"},{"teacher":"Mr. Prabhat Kumar Mishra","date":"2026-09-22","timing":"(15:30–17:00)"},{"teacher":"Mr. Prabhat Kumar Mishra","date":"2026-09-23","timing":"(11:00–12:30)"},{"teacher":"Mr. Prabhat Kumar Mishra","date":"2026-09-24","timing":"(15:30–17:00)"},{"teacher":"Mr. Prabhat Kumar Mishra","date":"2026-09-24","timing":"(15:30–17:00)"},{"teacher":"Mr. Prabhat Kumar Mishra","date":"2026-09-25","timing":"(13:30–15:00)"},{"teacher":"Mr. Prabhat Kumar Mishra","date":"2026-09-25","timing":"(15:30–17:00)"},{"teacher":"Mr. Prabhat Kumar Mishra","date":"2026-09-26","timing":"(15:30–17:00)"},{"teacher":"Mr. Prerit Narayan Mishra","date":"2026-09-21","timing":"(13:30–15:00)"},{"teacher":"Mr. Prerit Narayan Mishra","date":"2026-09-22","timing":"(09:00–10:30)"},{"teacher":"Mr. Prerit Narayan Mishra","date":"2026-09-22","timing":"(11:00–12:30)"},{"teacher":"Mr. Prerit Narayan Mishra","date":"2026-09-23","timing":"(09:00–10:30)"},{"teacher":"Mr. Prerit Narayan Mishra","date":"2026-09-23","timing":"(11:00–12:30)"},{"teacher":"Mr. Prerit Narayan Mishra","date":"2026-09-24","timing":"(11:00–12:30)"},{"teacher":"Mr. Prerit Narayan Mishra","date":"2026-09-26","timing":"(11:00–12:30)"},{"teacher":"Mr. Rishi Srivastava","date":"2026-09-22","timing":"(13:30–15:00)"},{"teacher":"Mr. Rishi Srivastava","date":"2026-09-22","timing":"(13:30–15:00)"},{"teacher":"Mr. Rishi Srivastava","date":"2026-09-23","timing":"(09:00–10:30)"},{"teacher":"Mr. Rishi Srivastava","date":"2026-09-23","timing":"(13:30–15:00)"},{"teacher":"Mr. Rishi Srivastava","date":"2026-09-24","timing":"(11:00–12:30)"},{"teacher":"Mr. Rishi Srivastava","date":"2026-09-25","timing":"(11:00–12:30)"},{"teacher":"Mr. Rishi Srivastava","date":"2026-09-26","timing":"(13:30–15:00)"},{"teacher":"Mr. Sharad Dixit","date":"2026-09-21","timing":"(15:30–17:00)"},{"teacher":"Mr. Sharad Dixit","date":"2026-09-21","timing":"(15:30–17:00)"},{"teacher":"Mr. Sharad Dixit","date":"2026-09-22","timing":"(11:00–12:30)"},{"teacher":"Mr. Sharad Dixit","date":"2026-09-22","timing":"(13:30–15:00)"},{"teacher":"Mr. Sharad Dixit","date":"2026-09-23","timing":"(13:30–15:00)"},{"teacher":"Mr. Sharad Dixit","date":"2026-09-24","timing":"(11:00–12:30)"},{"teacher":"Mr. Sharad Dixit","date":"2026-09-25","timing":"(11:00–12:30)"},{"teacher":"Mr. Sharad Dixit","date":"2026-09-26","timing":"(11:00–12:30)"},{"teacher":"Mrs. Mayuri Singh","date":"2026-09-21","timing":"(13:30–15:00)"},{"teacher":"Mrs. Mayuri Singh","date":"2026-09-21","timing":"(15:30–17:00)"},{"teacher":"Mrs. Mayuri Singh","date":"2026-09-23","timing":"(09:00–10:30)"},{"teacher":"Mrs. Mayuri Singh","date":"2026-09-23","timing":"(11:00–12:30)"},{"teacher":"Mrs. Mayuri Singh","date":"2026-09-24","timing":"(15:30–17:00)"},{"teacher":"Mrs. Mayuri Singh","date":"2026-09-24","timing":"(15:30–17:00)"},{"teacher":"Mrs. Mayuri Singh","date":"2026-09-26","timing":"(11:00–12:30)"},{"teacher":"Mrs. Mayuri Singh","date":"2026-09-26","timing":"(15:30–17:00)"},{"teacher":"Mrs. Pragya Srivastava","date":"2026-09-21","timing":"(15:30–17:00)"},{"teacher":"Mrs. Pragya Srivastava","date":"2026-09-22","timing":"(11:00–12:30)"},{"teacher":"Mrs. Pragya Srivastava","date":"2026-09-23","timing":"(11:00–12:30)"},{"teacher":"Mrs. Pragya Srivastava","date":"2026-09-23","timing":"(13:30–15:00)"},{"teacher":"Mrs. Pragya Srivastava","date":"2026-09-24","timing":"(09:00–10:30)"},{"teacher":"Mrs. Pragya Srivastava","date":"2026-09-25","timing":"(13:30–15:00)"},{"teacher":"Mrs. Pragya Srivastava","date":"2026-09-25","timing":"(15:30–17:00)"},{"teacher":"Mrs. Pragya Srivastava","date":"2026-09-26","timing":"(11:00–12:30)"},{"teacher":"Ms. Akriti Daksh","date":"2026-09-21","timing":"(11:00–12:30)"},{"teacher":"Ms. Akriti Daksh","date":"2026-09-21","timing":"(13:30–15:00)"},{"teacher":"Ms. Akriti Daksh","date":"2026-09-22","timing":"(11:00–12:30)"},{"teacher":"Ms. Akriti Daksh","date":"2026-09-23","timing":"(11:00–12:30)"},{"teacher":"Ms. Akriti Daksh","date":"2026-09-23","timing":"(13:30–15:00)"},{"teacher":"Ms. Akriti Daksh","date":"2026-09-24","timing":"(13:30–15:00)"},{"teacher":"Ms. Akriti Daksh","date":"2026-09-24","timing":"(13:30–15:00)"},{"teacher":"Ms. Akriti Daksh","date":"2026-09-26","timing":"(11:00–12:30)"},{"teacher":"Ms. Aparna","date":"2026-09-22","timing":"(09:00–10:30)"},{"teacher":"Ms. Aparna","date":"2026-09-22","timing":"(13:30–15:00)"},{"teacher":"Ms. Aparna","date":"2026-09-23","timing":"(13:30–15:00)"},{"teacher":"Ms. Aparna","date":"2026-09-24","timing":"(09:00–10:30)"},{"teacher":"Ms. Aparna","date":"2026-09-24","timing":"(13:30–15:00)"},{"teacher":"Ms. Aparna","date":"2026-09-25","timing":"(13:30–15:00)"},{"teacher":"Ms. Aparna","date":"2026-09-25","timing":"(13:30–15:00)"},{"teacher":"Ms. Deeksha Bajpai","date":"2026-09-21","timing":"(15:30–17:00)"},{"teacher":"Ms. Deeksha Bajpai","date":"2026-09-22","timing":"(15:30–17:00)"},{"teacher":"Ms. Deeksha Bajpai","date":"2026-09-23","timing":"(15:30–17:00)"},{"teacher":"Ms. Deeksha Bajpai","date":"2026-09-23","timing":"(15:30–17:00)"},{"teacher":"Ms. Deeksha Bajpai","date":"2026-09-24","timing":"(13:30–15:00)"},{"teacher":"Ms. Deeksha Bajpai","date":"2026-09-25","timing":"(11:00–12:30)"},{"teacher":"Ms. Deeksha Bajpai","date":"2026-09-26","timing":"(11:00–12:30)"},{"teacher":"Ms. Deeksha Bajpai","date":"2026-09-26","timing":"(15:30–17:00)"},{"teacher":"Ms. Hemlata Ninoriya","date":"2026-09-21","timing":"(09:00–10:30)"},{"teacher":"Ms. Hemlata Ninoriya","date":"2026-09-22","timing":"(09:00–10:30)"},{"teacher":"Ms. Hemlata Ninoriya","date":"2026-09-22","timing":"(13:30–15:00)"},{"teacher":"Ms. Hemlata Ninoriya","date":"2026-09-23","timing":"(09:00–10:30)"},{"teacher":"Ms. Hemlata Ninoriya","date":"2026-09-24","timing":"(09:00–10:30)"},{"teacher":"Ms. Hemlata Ninoriya","date":"2026-09-24","timing":"(11:00–12:30)"},{"teacher":"Ms. Hemlata Ninoriya","date":"2026-09-25","timing":"(11:00–12:30)"},{"teacher":"Ms. Kaushiki Trivedi","date":"2026-09-21","timing":"(11:00–12:30)"},{"teacher":"Ms. Kaushiki Trivedi","date":"2026-09-22","timing":"(09:00–10:30)"},{"teacher":"Ms. Kaushiki Trivedi","date":"2026-09-22","timing":"(11:00–12:30)"},{"teacher":"Ms. Kaushiki Trivedi","date":"2026-09-23","timing":"(09:00–10:30)"},{"teacher":"Ms. Kaushiki Trivedi","date":"2026-09-24","timing":"(11:00–12:30)"},{"teacher":"Ms. Kaushiki Trivedi","date":"2026-09-25","timing":"(11:00–12:30)"},{"teacher":"Ms. Kaushiki Trivedi","date":"2026-09-25","timing":"(13:30–15:00)"},{"teacher":"Ms. Meghna Bajpai","date":"2026-09-21","timing":"(13:30–15:00)"},{"teacher":"Ms. Meghna Bajpai","date":"2026-09-22","timing":"(11:00–12:30)"},{"teacher":"Ms. Meghna Bajpai","date":"2026-09-22","timing":"(13:30–15:00)"},{"teacher":"Ms. Meghna Bajpai","date":"2026-09-23","timing":"(09:00–10:30)"},{"teacher":"Ms. Meghna Bajpai","date":"2026-09-23","timing":"(13:30–15:00)"},{"teacher":"Ms. Meghna Bajpai","date":"2026-09-24","timing":"(09:00–10:30)"},{"teacher":"Ms. Meghna Bajpai","date":"2026-09-24","timing":"(13:30–15:00)"},{"teacher":"Ms. Minakshi","date":"2026-09-21","timing":"(09:00–10:30)"},{"teacher":"Ms. Minakshi","date":"2026-09-21","timing":"(11:00–12:30)"},{"teacher":"Ms. Minakshi","date":"2026-09-22","timing":"(09:00–10:30)"},{"teacher":"Ms. Minakshi","date":"2026-09-23","timing":"(11:00–12:30)"},{"teacher":"Ms. Minakshi","date":"2026-09-24","timing":"(09:00–10:30)"},{"teacher":"Ms. Minakshi","date":"2026-09-24","timing":"(13:30–15:00)"},{"teacher":"Ms. Minakshi","date":"2026-09-25","timing":"(11:00–12:30)"},{"teacher":"Ms. Pia Shukla","date":"2026-09-21","timing":"(09:00–10:30)"},{"teacher":"Ms. Pia Shukla","date":"2026-09-21","timing":"(11:00–12:30)"},{"teacher":"Ms. Pia Shukla","date":"2026-09-22","timing":"(09:00–10:30)"},{"teacher":"Ms. Pia Shukla","date":"2026-09-22","timing":"(11:00–12:30)"},{"teacher":"Ms. Pia Shukla","date":"2026-09-23","timing":"(11:00–12:30)"},{"teacher":"Ms. Pia Shukla","date":"2026-09-24","timing":"(09:00–10:30)"},{"teacher":"Ms. Pia Shukla","date":"2026-09-26","timing":"(11:00–12:30)"},{"teacher":"Ms. Satakshi Dixit","date":"2026-09-21","timing":"(13:30–15:00)"},{"teacher":"Ms. Satakshi Dixit","date":"2026-09-21","timing":"(15:30–17:00)"},{"teacher":"Ms. Satakshi Dixit","date":"2026-09-23","timing":"(09:00–10:30)"},{"teacher":"Ms. Satakshi Dixit","date":"2026-09-24","timing":"(13:30–15:00)"},{"teacher":"Ms. Satakshi Dixit","date":"2026-09-24","timing":"(13:30–15:00)"},{"teacher":"Ms. Satakshi Dixit","date":"2026-09-25","timing":"(11:00–12:30)"},{"teacher":"Ms. Satakshi Dixit","date":"2026-09-25","timing":"(13:30–15:00)"},{"teacher":"Ms. Satakshi Dixit","date":"2026-09-26","timing":"(15:30–17:00)"},{"teacher":"Ms. Shailja Sachan","date":"2026-09-21","timing":"(09:00–10:30)"},{"teacher":"Ms. Shailja Sachan","date":"2026-09-21","timing":"(11:00–12:30)"},{"teacher":"Ms. Shailja Sachan","date":"2026-09-22","timing":"(11:00–12:30)"},{"teacher":"Ms. Shailja Sachan","date":"2026-09-22","timing":"(11:00–12:30)"},{"teacher":"Ms. Shailja Sachan","date":"2026-09-23","timing":"(11:00–12:30)"},{"teacher":"Ms. Shailja Sachan","date":"2026-09-25","timing":"(11:00–12:30)"},{"teacher":"Ms. Shailja Sachan","date":"2026-09-26","timing":"(11:00–12:30)"},{"teacher":"Ms. Shailja Sachan","date":"2026-09-26","timing":"(13:30–15:00)"},{"teacher":"Ms. Sharwani Pandey","date":"2026-09-21","timing":"(09:00–10:30)"},{"teacher":"Ms. Sharwani Pandey","date":"2026-09-21","timing":"(09:00–10:30)"},{"teacher":"Ms. Sharwani Pandey","date":"2026-09-22","timing":"(09:00–10:30)"},{"teacher":"Ms. Sharwani Pandey","date":"2026-09-23","timing":"(09:00–10:30)"},{"teacher":"Ms. Sharwani Pandey","date":"2026-09-25","timing":"(11:00–12:30)"},{"teacher":"Ms. Sharwani Pandey","date":"2026-09-25","timing":"(13:30–15:00)"},{"teacher":"Ms. Sharwani Pandey","date":"2026-09-26","timing":"(13:30–15:00)"},{"teacher":"Ms. Vidhi Katiyar","date":"2026-09-21","timing":"(09:00–10:30)"},{"teacher":"Ms. Vidhi Katiyar","date":"2026-09-21","timing":"(11:00–12:30)"},{"teacher":"Ms. Vidhi Katiyar","date":"2026-09-22","timing":"(13:30–15:00)"},{"teacher":"Ms. Vidhi Katiyar","date":"2026-09-23","timing":"(11:00–12:30)"},{"teacher":"Ms. Vidhi Katiyar","date":"2026-09-24","timing":"(09:00–10:30)"},{"teacher":"Ms. Vidhi Katiyar","date":"2026-09-24","timing":"(11:00–12:30)"},{"teacher":"Ms. Vidhi Katiyar","date":"2026-09-25","timing":"(11:00–12:30)"},{"teacher":"Ms. Vidhi Katiyar","date":"2026-09-25","timing":"(13:30–15:00)"}]};
+
+const teacherEl = document.getElementById('teacher');
+const dateEl = document.getElementById('date');
+const resultEl = document.getElementById('result');
+
+DATA.teachers.forEach(t => {
+  const o=document.createElement('option'); o.value=t; o.textContent=t; teacherEl.appendChild(o);
+});
+DATA.dates.forEach(d => {
+  const o=document.createElement('option'); o.value=d; o.textContent=new Date(d+"T00:00:00").toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'}); dateEl.appendChild(o);
+});
+
+function checkDuty(){
+  const teacher=teacherEl.value, date=dateEl.value;
+  resultEl.style.display='block';
+  if(!teacher || !date){
+    resultEl.className='result none';
+    resultEl.innerHTML='<h2>Please select your name and exam date.</h2>';
+    return;
+  }
+  const matches=DATA.duties.filter(x=>x.teacher===teacher && x.date===date);
+  const niceDate=new Date(date+"T00:00:00").toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'});
+  if(matches.length){
+    resultEl.className='result assigned';
+    resultEl.innerHTML='<h2>Duty Assigned</h2>'+
+      '<div class="meta"><b>Teacher:</b> '+escapeHtml(teacher)+'</div>'+
+      '<div class="meta"><b>Date:</b> '+niceDate+'</div>'+
+      '<div class="timing">'+matches.map(x=>escapeHtml(x.timing)).join('<br>')+'</div>'+
+      '<div class="note">Room number / centre will be told at the Exam Control Room while signing.</div>';
+  } else {
+    resultEl.className='result none';
+    resultEl.innerHTML='<h2>No Duty Assigned</h2>'+
+      '<div class="meta"><b>Teacher:</b> '+escapeHtml(teacher)+'</div>'+
+      '<div class="meta"><b>Date:</b> '+niceDate+'</div>';
+  }
+}
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+}
+</script>
+</body>
+</html>
